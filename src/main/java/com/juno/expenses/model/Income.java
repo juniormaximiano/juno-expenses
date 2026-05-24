@@ -1,33 +1,25 @@
 package com.juno.expenses.model;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
 @Entity
-
 public class Income {
+
     @Id
-    GenerationType generationType = GenerationType.IDENTITY;
-    private long id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     public Income() {
-
     }
 
-    public GenerationType getGenerationType() {
-        return generationType;
-    }
-
-    public void setGenerationType(GenerationType generationType) {
-        this.generationType = generationType;
-    }
-
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 }

@@ -5,29 +5,36 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Positive;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @Entity
 public class Expense {
+
     @Id
-    GenerationType generationType = GenerationType.IDENTITY;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @NotBlank
     private String description;
 
 
-    @ManyToOne
+    @Enumerated(EnumType.STRING)
     private Category category;
 
     @Positive
     private BigDecimal amount;
 
-    private LocalDateTime date;
+    private LocalDate date;
 
-    @ManyToOne
-    private Place place;
+    private String place;
 
+    public String getPlace() {
+        return place;
+    }
+
+    public void setPlace(String place) {
+        this.place = place;
+    }
 
     public Long getId() {
         return id;
@@ -61,21 +68,14 @@ public class Expense {
         this.amount = amount;
     }
 
-    public LocalDateTime getDate() {
+    public LocalDate getDate() {
         return date;
     }
 
-    public void setDate(LocalDateTime date) {
+    public void setDate(LocalDate date) {
         this.date = date;
     }
 
-    public Place getPlace() {
-        return place;
-    }
-
-    public void setPlace(Place place) {
-        this.place = place;
-    }
 
     public Expense() {
     }
