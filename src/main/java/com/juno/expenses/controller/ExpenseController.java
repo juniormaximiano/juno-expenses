@@ -30,4 +30,9 @@ public class ExpenseController {
         return this.expenseService.getAllExpenses();
     }
 
+    @GetMapping("Order By Date Desc")
+    public List<ResponseExpenseDTO> findAllByOrderByDateDesc(){
+        return this.expenseService.findAllByOrderByDateAsc();
+    }
+
 }

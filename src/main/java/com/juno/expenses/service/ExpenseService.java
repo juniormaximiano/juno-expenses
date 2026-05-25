@@ -76,6 +76,23 @@ public class ExpenseService {
             return dto;
         }
 
+    public List<ResponseExpenseDTO> findAllByOrderByDateAsc() {
+
+        List<ResponseExpenseDTO> response = new ArrayList<>();
+
+        var savedExpenses = expenseRepository.findAllByOrderByDateDesc();
+
+        if (savedExpenses.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NO_CONTENT, "Nothing found");
+        }
+
+        for (Expense expense : savedExpenses){
+            response.add(convertExpenseToDTO(expense));
+        }
+
+        return response;
+
+    }
 
 
 }
