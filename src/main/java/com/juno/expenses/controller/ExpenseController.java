@@ -18,8 +18,6 @@ public class ExpenseController {
         this.expenseService = expenseService;
     }
 
-
-
     @PostMapping
     public ResponseExpenseDTO createExpense(@RequestBody @Valid CreateExpenseDTO dto){
         return this.expenseService.createExpense(dto);
@@ -33,6 +31,11 @@ public class ExpenseController {
     @GetMapping("Order By Date Desc")
     public List<ResponseExpenseDTO> findAllByOrderByDateDesc(){
         return this.expenseService.findAllByOrderByDateAsc();
+    }
+
+    @GetMapping(path = "/{id}")
+    public List<ResponseExpenseDTO> findExpenseById(@PathVariable long id){
+        return this.expenseService.findExpenseById(id);
     }
 
 }

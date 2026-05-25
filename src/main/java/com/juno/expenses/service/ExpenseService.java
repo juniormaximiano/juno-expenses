@@ -57,7 +57,7 @@ public class ExpenseService {
 
         List<ResponseExpenseDTO> response = new ArrayList<>();
 
-        for(Expense expense: savedExpenses){
+        for (Expense expense : savedExpenses) {
             response.add(convertExpenseToDTO(expense));
 
         }
@@ -65,16 +65,16 @@ public class ExpenseService {
     }
 
     public ResponseExpenseDTO convertExpenseToDTO(Expense expense) {
-            ResponseExpenseDTO dto = new ResponseExpenseDTO(
-                    expense.getId(),
-                    expense.getDescription(),
-                    expense.getCategory(),
-                    expense.getPlace(),
-                    expense.getDate(),
-                    expense.getAmount()
-            );
-            return dto;
-        }
+        ResponseExpenseDTO dto = new ResponseExpenseDTO(
+                expense.getId(),
+                expense.getDescription(),
+                expense.getCategory(),
+                expense.getPlace(),
+                expense.getDate(),
+                expense.getAmount()
+        );
+        return dto;
+    }
 
     public List<ResponseExpenseDTO> findAllByOrderByDateAsc() {
 
@@ -86,7 +86,7 @@ public class ExpenseService {
             throw new ResponseStatusException(HttpStatus.NO_CONTENT, "Nothing found");
         }
 
-        for (Expense expense : savedExpenses){
+        for (Expense expense : savedExpenses) {
             response.add(convertExpenseToDTO(expense));
         }
 
@@ -94,6 +94,25 @@ public class ExpenseService {
 
     }
 
+    public List<ResponseExpenseDTO> findExpenseById(long id) {
+
+        List<ResponseExpenseDTO> response = new ArrayList<>();
+
+        var searchedExpense = expenseRepository.findById(id);
+
+            if (searchedExpense.isEmpty()) {
+
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Expense not found");
+
+            } else {
+
+                response.add(convertExpenseToDTO(searchedExpense.get()));
+
+            }
+
+            return response;
+
+    }
 
 }
 
