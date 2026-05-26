@@ -2,6 +2,7 @@ package com.juno.expenses.controller;
 
 import com.juno.expenses.dto.CreateExpenseDTO;
 import com.juno.expenses.dto.ResponseExpenseDTO;
+import com.juno.expenses.dto.UpdateExpenseDTO;
 import com.juno.expenses.service.ExpenseService;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
@@ -36,6 +37,16 @@ public class ExpenseController {
     @GetMapping(path = "/{id}")
     public List<ResponseExpenseDTO> findExpenseById(@PathVariable long id){
         return this.expenseService.findExpenseById(id);
+    }
+
+    @DeleteMapping
+    public void deleteExpenseById(@RequestParam long id){
+        this.expenseService.deleteExpenseById(id);
+    }
+
+    @PutMapping
+    public ResponseExpenseDTO updateExpenseById(@RequestParam long  id ,@RequestBody UpdateExpenseDTO dto){
+        return this.expenseService.updateExpenseById(id,dto);
     }
 
 }

@@ -2,6 +2,7 @@ package com.juno.expenses.service;
 
 import com.juno.expenses.dto.CreateExpenseDTO;
 import com.juno.expenses.dto.ResponseExpenseDTO;
+import com.juno.expenses.dto.UpdateExpenseDTO;
 import com.juno.expenses.model.Expense;
 import com.juno.expenses.repository.ExpenseRepository;
 import org.springframework.http.HttpStatus;
@@ -40,8 +41,7 @@ public class ExpenseService {
                 savedExpense.getCategory(),
                 savedExpense.getPlace(),
                 savedExpense.getDate(),
-                savedExpense.getAmount()
-        );
+                savedExpense.getAmount());
 
         return dto;
 
@@ -65,14 +65,7 @@ public class ExpenseService {
     }
 
     public ResponseExpenseDTO convertExpenseToDTO(Expense expense) {
-        ResponseExpenseDTO dto = new ResponseExpenseDTO(
-                expense.getId(),
-                expense.getDescription(),
-                expense.getCategory(),
-                expense.getPlace(),
-                expense.getDate(),
-                expense.getAmount()
-        );
+        ResponseExpenseDTO dto = new ResponseExpenseDTO(expense.getId(), expense.getDescription(), expense.getCategory(), expense.getPlace(), expense.getDate(), expense.getAmount());
         return dto;
     }
 
@@ -100,19 +93,58 @@ public class ExpenseService {
 
         var searchedExpense = expenseRepository.findById(id);
 
-            if (searchedExpense.isEmpty()) {
+        if (searchedExpense.isEmpty()) {
 
-                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Expense not found");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Expense not found");
 
-            } else {
+        } else {
 
-                response.add(convertExpenseToDTO(searchedExpense.get()));
+            response.add(convertExpenseToDTO(searchedExpense.get()));
 
-            }
+        }
 
-            return response;
+        return response;
 
     }
+
+    public void deleteExpenseById(long id) {
+
+        var expenseSearched = expenseRepository.findById(id);
+
+        if (expenseSearched.isEmpty()) {
+
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Expense not found");
+        }
+            expenseRepository.deleteById(id);
+
+
+    }
+
+    public ResponseExpenseDTO updateExpenseById(long id, UpdateExpenseDTO UpDTO) {
+
+        var searchedExpense = expenseRepository.findById(id);
+
+
+        if (searchedExpense.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Expense not found");
+        }
+
+
+        var ExpenseToUpdate = searchedExpense.get();
+        ExpenseToUpdate.setDescription(UpDTO.description());
+        ExpenseToUpdate.setCategory(UpDTO.category());
+        ExpenseToUpdate.setAmount(UpDTO.amount());
+        ExpenseToUpdate.setDate(UpDTO.date());
+        ExpenseToUpdate.setPlace(UpDTO.placeName());
+
+
+        var savedExpense =  expenseRepository.save(ExpenseToUpdate);
+
+        return convertExpenseToDTO(savedExpense);
+
+    }
+
+
 
 }
 
