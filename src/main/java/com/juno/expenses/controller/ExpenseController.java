@@ -55,4 +55,9 @@ public class ExpenseController {
         return this.expenseService.findAllByCategory(category);
     }
 
+    @GetMapping("/place/")
+    public List<ResponseExpenseDTO> findExpenseByPlace(@RequestParam(required = false) String place) {
+        return this.expenseService.findAllByPlace(place);
+    }
+
 }

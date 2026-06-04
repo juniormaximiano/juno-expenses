@@ -165,8 +165,22 @@ public class ExpenseService {
 
     }
 
+    public List<ResponseExpenseDTO> findAllByPlace(String place) {
+
+        var searchedPlaces = expenseRepository.findAllByPlace(place);
+
+        List<ResponseExpenseDTO> response = new ArrayList<>();
 
 
+        if (searchedPlaces.isEmpty()) {
+            getAllExpenses();
+        }
+
+        for (Expense expense : searchedPlaces) {
+            response.add(convertExpenseToDTO(expense));
+        }
+        return response;
+    }
 
 }
 

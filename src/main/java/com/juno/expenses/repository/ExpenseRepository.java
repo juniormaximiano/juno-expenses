@@ -9,9 +9,11 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface ExpenseRepository  extends JpaRepository<Expense, Long> {
+public interface ExpenseRepository extends JpaRepository<Expense, Long> {
 
     List<Expense> findAllByOrderByDateDesc();
-     
+
     List<Expense> findAllByCategory(Category category);
+
+    List<Expense> findAllByPlace(String place);
 }
