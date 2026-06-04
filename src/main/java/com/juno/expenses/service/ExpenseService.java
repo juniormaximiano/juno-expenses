@@ -3,6 +3,7 @@ package com.juno.expenses.service;
 import com.juno.expenses.dto.CreateExpenseDTO;
 import com.juno.expenses.dto.ResponseExpenseDTO;
 import com.juno.expenses.dto.UpdateExpenseDTO;
+import com.juno.expenses.model.Category;
 import com.juno.expenses.model.Expense;
 import com.juno.expenses.repository.ExpenseRepository;
 import org.springframework.http.HttpStatus;
@@ -143,6 +144,27 @@ public class ExpenseService {
         return convertExpenseToDTO(savedExpense);
 
     }
+
+    public List<ResponseExpenseDTO> findAllByCategory(Category category) {
+
+        var savedExpenses = expenseRepository.findAllByCategory(category);
+
+        List<ResponseExpenseDTO> response = new ArrayList<>();
+
+        if (category == null) {
+            return getAllExpenses();
+        }
+
+        for (Expense expense : savedExpenses) {
+            response.add(convertExpenseToDTO(expense));
+        }
+
+        return response;
+
+
+
+    }
+
 
 
 
