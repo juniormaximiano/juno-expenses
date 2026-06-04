@@ -2,6 +2,7 @@ package com.juno.expenses.service;
 
 import com.juno.expenses.dto.CreateExpenseDTO;
 import com.juno.expenses.dto.ResponseExpenseDTO;
+import com.juno.expenses.dto.TotalExpenseDTO;
 import com.juno.expenses.dto.UpdateExpenseDTO;
 import com.juno.expenses.model.Category;
 import com.juno.expenses.model.Expense;
@@ -10,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -116,7 +118,7 @@ public class ExpenseService {
 
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Expense not found");
         }
-            expenseRepository.deleteById(id);
+        expenseRepository.deleteById(id);
 
 
     }
@@ -139,7 +141,7 @@ public class ExpenseService {
         ExpenseToUpdate.setPlace(UpDTO.placeName());
 
 
-        var savedExpense =  expenseRepository.save(ExpenseToUpdate);
+        var savedExpense = expenseRepository.save(ExpenseToUpdate);
 
         return convertExpenseToDTO(savedExpense);
 
@@ -162,7 +164,6 @@ public class ExpenseService {
         return response;
 
 
-
     }
 
     public List<ResponseExpenseDTO> findAllByPlace(String place) {
@@ -182,6 +183,31 @@ public class ExpenseService {
         return response;
     }
 
+    public TotalExpenseDTO getTotalExpense() {
+
+        var savedExpenses = expenseRepository.findAll();
+
+        if (savedExpenses.isEmpty()) {
+
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Non existing expenses");
+
+        }
+
+
+        var sumAmount = BigDecimal.ZERO;
+
+        for (Expense expense : savedExpenses) {
+
+            sumAmount = sumAmount.add(expense.getAmount());
+
+        }
+
+        TotalExpenseDTO dto = new TotalExpenseDTO(sumAmount);
+
+        return dto;
+
+
+    }
 }
 
 

@@ -2,6 +2,7 @@ package com.juno.expenses.controller;
 
 import com.juno.expenses.dto.CreateExpenseDTO;
 import com.juno.expenses.dto.ResponseExpenseDTO;
+import com.juno.expenses.dto.TotalExpenseDTO;
 import com.juno.expenses.dto.UpdateExpenseDTO;
 import com.juno.expenses.model.Category;
 import com.juno.expenses.service.ExpenseService;
@@ -58,6 +59,11 @@ public class ExpenseController {
     @GetMapping("/place/")
     public List<ResponseExpenseDTO> findExpenseByPlace(@RequestParam(required = false) String place) {
         return this.expenseService.findAllByPlace(place);
+    }
+
+    @GetMapping("/total/")
+    public TotalExpenseDTO  getTotalExpense() {
+        return this.expenseService.getTotalExpense();
     }
 
 }
