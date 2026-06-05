@@ -18,4 +18,5 @@ public interface ExpenseRepository extends JpaRepository<Expense, Long> {
     List<Expense> findAllByPlace(String place);
 
     List<Expense> findByDateBetween(LocalDate dateAfter, LocalDate dateBefore);
+
 }

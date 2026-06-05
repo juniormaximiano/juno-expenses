@@ -4,7 +4,6 @@ import com.juno.expenses.dto.*;
 import com.juno.expenses.model.Category;
 import com.juno.expenses.service.ExpenseService;
 import jakarta.validation.Valid;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
@@ -82,6 +81,11 @@ public class ExpenseController {
     @GetMapping("/expenses/date-range")
     public List<ResponseExpenseDTO> getExpensesByDateRange(LocalDate dateAfter, LocalDate dateBefore ) {
         return this.expenseService.findByDateBetween(dateAfter, dateBefore);
+    }
+
+    @GetMapping("/expenses/total/date-range")
+    public TotalPerCategoryDTO getTotalExpensesByDateRange(Category category, LocalDate dateAfter, LocalDate dateBefore) {
+        return this.expenseService.getTotalByPeriod(category, dateAfter, dateBefore);
     }
 
 }
