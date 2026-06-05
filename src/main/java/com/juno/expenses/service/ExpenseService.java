@@ -1,9 +1,6 @@
 package com.juno.expenses.service;
 
-import com.juno.expenses.dto.CreateExpenseDTO;
-import com.juno.expenses.dto.ResponseExpenseDTO;
-import com.juno.expenses.dto.TotalExpenseDTO;
-import com.juno.expenses.dto.UpdateExpenseDTO;
+import com.juno.expenses.dto.*;
 import com.juno.expenses.model.Category;
 import com.juno.expenses.model.Expense;
 import com.juno.expenses.repository.ExpenseRepository;
@@ -204,6 +201,27 @@ public class ExpenseService {
 
         TotalExpenseDTO dto = new TotalExpenseDTO(sumAmount);
 
+        return dto;
+
+
+    }
+
+    public TotalPerCategoryDTO getTotalPerCategory(Category category) {
+
+        var savedExpenses = expenseRepository.findAllByCategory(category);
+
+        if (savedExpenses.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Non existing expenses");
+        }
+
+        var sumAmount = BigDecimal.ZERO;
+
+        for (Expense expense : savedExpenses) {
+            sumAmount = sumAmount.add(expense.getAmount());
+
+        }
+
+        TotalPerCategoryDTO dto = new TotalPerCategoryDTO(category, sumAmount);
         return dto;
 
 

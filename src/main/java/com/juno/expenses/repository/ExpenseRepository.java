@@ -16,6 +16,4 @@ public interface ExpenseRepository extends JpaRepository<Expense, Long> {
     List<Expense> findAllByCategory(Category category);
 
     List<Expense> findAllByPlace(String place);
-
-
 }

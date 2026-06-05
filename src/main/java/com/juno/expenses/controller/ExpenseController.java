@@ -1,9 +1,6 @@
 package com.juno.expenses.controller;
 
-import com.juno.expenses.dto.CreateExpenseDTO;
-import com.juno.expenses.dto.ResponseExpenseDTO;
-import com.juno.expenses.dto.TotalExpenseDTO;
-import com.juno.expenses.dto.UpdateExpenseDTO;
+import com.juno.expenses.dto.*;
 import com.juno.expenses.model.Category;
 import com.juno.expenses.service.ExpenseService;
 import jakarta.validation.Valid;
@@ -64,6 +61,11 @@ public class ExpenseController {
     @GetMapping("/total/")
     public TotalExpenseDTO  getTotalExpense() {
         return this.expenseService.getTotalExpense();
+    }
+
+    @GetMapping("/expenses/total/category/{category}")
+    public TotalPerCategoryDTO getTotalExpenseByCategory(@PathVariable Category category) {
+        return this.expenseService.getTotalPerCategory(category);
     }
 
 }
