@@ -4,12 +4,14 @@ import com.juno.expenses.dto.*;
 import com.juno.expenses.model.Category;
 import com.juno.expenses.service.ExpenseService;
 import jakarta.validation.Valid;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
-@RequestMapping("Expenses")
+@RequestMapping("/expenses")
 public class ExpenseController {
 
     ExpenseService expenseService;
@@ -28,44 +30,60 @@ public class ExpenseController {
         return this.expenseService.getAllExpenses();
     }
 
-    @GetMapping("Order By Date Desc")
+    @GetMapping("/sorted")
     public List<ResponseExpenseDTO> findAllByOrderByDateDesc() {
-        return this.expenseService.findAllByOrderByDateAsc();
+        return this.expenseService.findAllByOrderByDateDesc();
     }
 
-    @GetMapping(path = "/{id}")
-    public List<ResponseExpenseDTO> findExpenseById(@Valid @PathVariable long id) {
+    @GetMapping("/{id}")
+    public List<ResponseExpenseDTO> findExpenseById(@PathVariable long id) {
         return this.expenseService.findExpenseById(id);
     }
 
-    @DeleteMapping
-    public void deleteExpenseById(@Valid @RequestParam long id) {
+    @DeleteMapping("/{id}")
+    public void deleteExpenseById(@PathVariable long id) {
         this.expenseService.deleteExpenseById(id);
     }
 
-    @PutMapping
-    public ResponseExpenseDTO updateExpenseById(@Valid @RequestParam long id, @RequestBody UpdateExpenseDTO dto) {
+    @PutMapping("/{id}")
+    public ResponseExpenseDTO updateExpenseById(
+            @PathVariable long id,
+            @RequestBody @Valid UpdateExpenseDTO dto
+    ) {
         return this.expenseService.updateExpenseById(id, dto);
     }
 
-    @GetMapping("/category/")
-    public List<ResponseExpenseDTO> findExpenseByCategory(@RequestParam(required = false) Category category) {
+    @GetMapping("/category/{category}")
+    public List<ResponseExpenseDTO> findExpenseByCategory(
+            @PathVariable Category category
+    ) {
         return this.expenseService.findAllByCategory(category);
     }
 
-    @GetMapping("/place/")
-    public List<ResponseExpenseDTO> findExpenseByPlace(@RequestParam(required = false) String place) {
+    @GetMapping("/place/{place}")
+    public List<ResponseExpenseDTO> findExpenseByPlace(
+            @PathVariable String place
+    ) {
         return this.expenseService.findAllByPlace(place);
     }
 
-    @GetMapping("/total/")
-    public TotalExpenseDTO  getTotalExpense() {
+    @GetMapping("/total")
+    public TotalExpenseDTO getTotalExpense() {
         return this.expenseService.getTotalExpense();
     }
 
-    @GetMapping("/expenses/total/category/{category}")
-    public TotalPerCategoryDTO getTotalExpenseByCategory(@PathVariable Category category) {
+    @GetMapping("/total/category/{category}")
+    public TotalPerCategoryDTO getTotalExpenseByCategory(
+            @PathVariable Category category
+    ) {
         return this.expenseService.getTotalPerCategory(category);
     }
 
+    @GetMapping("/expenses/date-range")
+    public List<ResponseExpenseDTO> getExpensesByDateRange(LocalDate dateAfter, LocalDate dateBefore ) {
+        return this.expenseService.findByDateBetween(dateAfter, dateBefore);
+    }
+
 }
+
+

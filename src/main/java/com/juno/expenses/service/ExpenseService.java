@@ -69,7 +69,7 @@ public class ExpenseService {
         return dto;
     }
 
-    public List<ResponseExpenseDTO> findAllByOrderByDateAsc() {
+    public List<ResponseExpenseDTO> findAllByOrderByDateDesc() {
 
         List<ResponseExpenseDTO> response = new ArrayList<>();
 
@@ -223,6 +223,24 @@ public class ExpenseService {
 
         TotalPerCategoryDTO dto = new TotalPerCategoryDTO(category, sumAmount);
         return dto;
+
+
+    }
+
+    public List<ResponseExpenseDTO> findByDateBetween(LocalDate dateAfter, LocalDate dateBefore) {
+
+        List<ResponseExpenseDTO> response =  new ArrayList<>();
+
+        var searchedExpenses = expenseRepository.findByDateBetween(dateAfter, dateBefore);
+
+        if (searchedExpenses.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Non existing expenses");
+        }
+
+        for (Expense expense : searchedExpenses) {
+            response.add(convertExpenseToDTO(expense));
+        }
+        return response;
 
 
     }
