@@ -35,7 +35,7 @@ public class ExpenseController {
     }
 
     @GetMapping("/{id}")
-    public List<ResponseExpenseDTO> findExpenseById(@PathVariable long id) {
+    public ResponseExpenseDTO findExpenseById(@PathVariable long id) {
         return this.expenseService.findExpenseById(id);
     }
 

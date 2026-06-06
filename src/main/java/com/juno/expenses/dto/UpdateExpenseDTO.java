@@ -1,14 +1,15 @@
 package com.juno.expenses.dto;
 
 import com.juno.expenses.model.Category;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
 public record UpdateExpenseDTO(
-        @NotNull
+
+        @NotBlank(message = "Description must not be blank")
+        @Size(min = 3, max = 100, message = "Description must be between 3 and 100 characters")
         String description,
 
         @NotNull
@@ -17,10 +18,12 @@ public record UpdateExpenseDTO(
         @Positive
         BigDecimal amount,
 
-        @NotNull
+        @Positive(message = "Amount must be greater than zero")
+        @PastOrPresent(message = "Date cannot be in the future")
         LocalDate date,
 
-        @NotNull
+        @NotBlank
+        @Size(min = 3, max = 100)
         String placeName
 ) {
 }
