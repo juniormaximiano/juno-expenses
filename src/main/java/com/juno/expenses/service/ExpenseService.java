@@ -4,10 +4,13 @@ import com.juno.expenses.dto.*;
 import com.juno.expenses.model.Category;
 import com.juno.expenses.model.Expense;
 import com.juno.expenses.repository.ExpenseRepository;
+import com.opencsv.CSVWriter;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.io.IOException;
+import java.io.StringWriter;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -190,6 +193,57 @@ public class ExpenseService {
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
 
         return new TotalPerCategoryDTO(category, sumAmount);
+    }
+
+    public String exportAllExpenses() {
+
+        var savedExpenses = expenseRepository.findAll();
+
+        if (savedExpenses.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Non existing expenses");
+        }
+
+        try {
+            StringWriter sw = new StringWriter();
+            CSVWriter csvWriter = new CSVWriter(sw);
+
+            String[] header = new String[]{
+                    "id",
+                    "description",
+                    "category",
+                    "amount",
+                    "date",
+                    "place"
+            };
+
+            csvWriter.writeNext(header);
+
+            for (Expense expense : savedExpenses) {
+
+                csvWriter.writeNext(new String[]{
+                        String.valueOf(expense.getId()),
+                        expense.getDescription(),
+                        expense.getCategory().toString(),
+                        String.valueOf(expense.getAmount()),
+                        expense.getDate().toString(),
+                        expense.getPlace()
+
+
+                });
+
+
+
+
+            }
+
+            csvWriter.flush();
+            return sw.toString();
+
+        } catch (IOException e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Failed to generate CSV file");
+        }
+
+
     }
 }
 
